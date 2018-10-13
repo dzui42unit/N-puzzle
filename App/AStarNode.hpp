@@ -13,6 +13,7 @@ public:
     explicit    Node( int*  field, size_t size,
                       Node* Parent = nullptr,
                       Common::HeuristicTypes hType = Common::HeuristicTypes::Manhattan );
+    Node() = delete;
     void        CreateChildNodes();
     size_t      GetSize() { return (size_); }
     int         GetHeuristicValue() { return (heuristic_); }

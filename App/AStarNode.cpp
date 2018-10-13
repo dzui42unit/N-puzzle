@@ -1,11 +1,11 @@
 #include "AStarNode.hpp"
-#include "Tools/Field.hpp"
+#include "../Tools/Field.hpp"
 
 #include <cassert>
 
 
 Node::Node( int* field, size_t size,
-            Node* Parent = nullptr,
+            Node* Parent,
             Common::HeuristicTypes hType)
     : parent_(Parent)
     , field_(new int[size * size]())
