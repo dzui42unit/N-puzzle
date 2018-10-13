@@ -12,7 +12,7 @@ struct Node
 public:
     explicit    Node( int*  field, size_t size,
                       Node* Parent = nullptr,
-                      Common::HeuristicTypes hType = Common::Heuristic::Manhattan );
+                      Common::HeuristicTypes hType = Common::HeuristicTypes::Manhattan );
     void        CreateChildNodes();
     ~Node();
 
