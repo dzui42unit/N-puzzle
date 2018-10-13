@@ -12,12 +12,12 @@ Parser::Parser(const char* name)
     std::string content( (std::istreambuf_iterator<char>(ifs) ),
                        (std::istreambuf_iterator<char>()    ) );
 
-    auto splitted = Common::split(content, '\n');
+    auto splitted = Common::tools::split(content, '\n');
     size_ = splitted.size();
     std::vector<std::string> data;
     for (const auto& str : splitted)
     {
-        auto data = Common::split(str, ' ');
+        auto data = Common::tools::split(str, ' ');
         if (data.size() != size_)
         {
             hasError_ = true;
