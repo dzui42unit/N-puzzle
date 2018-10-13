@@ -14,18 +14,22 @@ public:
                       Node* Parent = nullptr,
                       Common::HeuristicTypes hType = Common::HeuristicTypes::Manhattan );
     void        CreateChildNodes();
+    size_t      GetSize() { return (size_); }
+    int         GetHeuristicValue() { return (heuristic_); }
+    int         GetDepth() { return (depth_); }
+    Node*       GetParent() { return (parent_); }
+    int*        GetField() { return (field_.get()); }
     ~Node();
 
 public:
-    std::unique_ptr<int[]>  field_;
-    size_t                  size_;
-    int                     totalComplexity_;
-    std::list< std::unique_ptr<Node> >  childrens_;
+    std::list<Node>  childrens_;
 
 
 private:
+    std::unique_ptr<int[]>              field_;
     Node*                               parent_;
     int                                 heuristic_;
     int                                 depth_;
+    size_t                              size_;
     Common::HeuristicTypes              heuristicType_;
 };

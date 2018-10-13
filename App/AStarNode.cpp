@@ -10,7 +10,6 @@ Node::Node( int* field, size_t size,
     : parent_(Parent)
     , field_(new int[size * size]())
     , size_(size)
-    , totalComplexity_(-1)
     , heuristicType_(hType)
 {
     for (int i = 0; i < size_ * size_; i++)
@@ -25,7 +24,6 @@ Node::Node( int* field, size_t size,
         heuristic_ = Common::invoker::invoke(&Heuristic::Manhattan, field, size);
     else
         assert(0 && "Not implemented yet!");
-    totalComplexity_ = heuristic_ + depth_;
 }
 
 void Node::CreateChildNodes()
@@ -41,28 +39,28 @@ void Node::CreateChildNodes()
     if (Field::CanMoveUp(newField.get(), size_))
     {
         Field::Up(newField.get(), size_);
-        childrens_.push_back(std::make_unique<Node>(newField.get(), size_, this, heuristicType_));
+        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
         resetField();
     }
     
     if (Field::CanMoveDown(newField.get(), size_))
     {
         Field::Down(newField.get(), size_);
-        childrens_.push_back(std::make_unique<Node>(newField.get(), size_, this, heuristicType_));
+        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
         resetField();
     }
 
     if (Field::CanMoveLeft(newField.get(), size_))
     {
         Field::Left(newField.get(), size_);
-        childrens_.push_back(std::make_unique<Node>(newField.get(), size_, this, heuristicType_));
+        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
         resetField();
     }
 
     if (Field::CanMoveUp(newField.get(), size_))
     {
         Field::Right(newField.get(), size_);
-        childrens_.push_back(std::make_unique<Node>(newField.get(), size_, this, heuristicType_));
+        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
         resetField();
     }
 }
