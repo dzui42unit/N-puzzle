@@ -4,7 +4,7 @@
 #include <list>
 
 #include "Heuristic.hpp"
-#include "Common.hpp"
+#include "../Tools/Common.hpp"
 
 
 struct Node
