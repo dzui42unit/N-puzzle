@@ -48,8 +48,27 @@ int main(int ac, char** av)
                 newNodePtr = &newNode;
         }
         nodePtr = newNodePtr;
+        heuristics = nodePtr->GetHeuristicValue();
+    }
+
+    nodePtr = &n;
+    heuristics = 1;
+    while (heuristics)
+    {
+        Node* newNodePtr = nullptr;
+        for (auto& newNode : nodePtr->childrens_)
+        {
+            if (newNodePtr != nullptr)
+            {
+                if (newNodePtr->GetHeuristicValue() > newNode.GetHeuristicValue())
+                    newNodePtr = &newNode;
+            }
+            else
+                newNodePtr = &newNode;
+        }
+        nodePtr = newNodePtr;
         std::cout << "Depth: " << nodePtr->GetDepth() << " Heuristics: " << nodePtr->GetHeuristicValue() << " Field:" << std::endl;
-        Field::Print(nodePtr->GetField(), nodePtr->GetSize());
+        Field::PrintPrintf(nodePtr->GetField(), nodePtr->GetSize());
         std::cout << std::endl;
         heuristics = nodePtr->GetHeuristicValue();
     }

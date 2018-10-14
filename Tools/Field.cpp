@@ -2,6 +2,7 @@
 #include "Common.hpp"
 #include <iostream>
 #include <iomanip>
+#include <cstdio>
 #include <cassert>
 
 
@@ -87,40 +88,58 @@ void Field::Print(int* field, size_t size)
     showSections();
 }
 
-bool Field::CanMoveUp(int* field, size_t size)
+void Field::PrintPrintf(int* field, size_t size)
 {
-    int pos = FindZeroPos(field, size);
+    int maxWidthInDigits = 0;
 
-    return ( pos != -1 && pos / size != 0);
-}
+    // Find max width in digits to align data
+    for (int i = 0; i < size * size; i++)
+    {
+        int digitNum = Common::tools::countDigit(field[i]);
+        if (maxWidthInDigits < digitNum)
+            maxWidthInDigits = digitNum;
+    }
 
-bool Field::CanMoveDown(int* field, size_t size)
-{
-    int pos = FindZeroPos(field, size);
+    // Init 'sections' needed for gamefield output
+    std::string section(maxWidthInDigits, '-');
+    section += "-|";
+    auto showSections = [&](){ // Function to draw section
+        printf("|");
+        for (int j = 0; j < size; j++)
+            printf("-%s", section.c_str());
+        printf("\n");
+    };
 
-    return ( pos != -1 && pos / size != size - 1 );
-}
-
-bool Field::CanMoveLeft(int* field, size_t size)
-{
-    int pos = FindZeroPos(field, size);
-
-    return (  pos != -1 && pos % size != 0  );
-}
-
-bool Field::CanMoveRight(int* field, size_t size)
-{
-    int pos = FindZeroPos(field, size);
-
-    return (  pos != -1 && pos % size != size - 1  );
+    for (int i = 0; i < size; i++)
+    {
+        showSections();
+        printf("| ");
+        for (int j = 0; j < size; j++)
+        {
+            if (field[i * size + j] == 0)
+                printf("%*c | ", maxWidthInDigits, ' ');
+            else
+                printf("%*d | ", maxWidthInDigits, field[i * size + j]);
+        }
+        std::cout << std::endl;
+    }
+    showSections();
 }
 
 int Field::FindZeroPos(int* field, size_t size)
 {
+    static int zeroPos = 0;
+
+    if (field[zeroPos] == 0)
+        return (zeroPos);
+
     for (int i = 0; i < size * size; i++)
     {
         if (field[i] == 0)
+        {
+            zeroPos = i;
             return (i);
+        }
     }
     
     return (-1);

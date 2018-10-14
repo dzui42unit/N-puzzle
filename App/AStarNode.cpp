@@ -35,37 +35,29 @@ Node::~Node()
 
 void Node::CreateChildNodes()
 {
-    int     newField[size_ * size_];
-    int*    pNewField = newField;
-    
-    for (int i = 0; i < size_ * size_; i++)
-        pNewField[i] = field_[i];
+    int*    pNewField = field_.get();
 
-    if (Field::CanMoveUp(newField, size_))
+    if (Field::Up(pNewField, size_))
     {
-        Field::Up(newField, size_);
         childrens_.emplace_back(pNewField, size_, this, heuristicType_);
-        Field::Down(newField, size_);
+        Field::Down(pNewField, size_);
     }
     
-    if (Field::CanMoveDown(newField, size_))
+    if (Field::Down(pNewField, size_))
     {
-        Field::Down(newField, size_);
         childrens_.emplace_back(pNewField, size_, this, heuristicType_);
-        Field::Up(newField, size_);
+        Field::Up(pNewField, size_);
     }
 
-    if (Field::CanMoveLeft(newField, size_))
+    if (Field::Left(pNewField, size_))
     {
-        Field::Left(newField, size_);
         childrens_.emplace_back(pNewField, size_, this, heuristicType_);
-        Field::Right(newField, size_);
+        Field::Right(pNewField, size_);
     }
 
-    if (Field::CanMoveRight(newField, size_))
+    if (Field::Right(pNewField, size_))
     {
-        Field::Right(newField, size_);
         childrens_.emplace_back(pNewField, size_, this, heuristicType_);
-        Field::Left(newField, size_);
+        Field::Left(pNewField, size_);
     }
 }

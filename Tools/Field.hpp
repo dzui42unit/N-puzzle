@@ -47,12 +47,11 @@ public:
     */ 
     static void     Print(int* field, size_t size);
 
-    static bool     CanMoveUp(int* field, size_t size);
-    static bool     CanMoveDown(int* field, size_t size);
-    static bool     CanMoveLeft(int* field, size_t size);
-    static bool     CanMoveRight(int* field, size_t size);
+    /*
+    * @brief Same, but faster
+    */ 
+    static void     PrintPrintf(int* field, size_t size);
 
-private:
     /*
     * @brief finds position  of empty cell on the field
     * @param field - the field itself like flat 2d array
