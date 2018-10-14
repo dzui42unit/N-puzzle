@@ -15,14 +15,20 @@ Parser::Parser(const char* name)
 
     // Remove spaces
     Common::tools::compressChars(content, ' ');
-    Common::tools::trim(content);
 
     // Split by \n to get all rows, use it's count a edge size of the gamefield
     auto splitted = Common::tools::split(content, '\n');
-    size_ = splitted.size();
-    std::vector<std::string> data; // vector to store data in string format
-    for (const auto& str : splitted)
+    RemoveComments(splitted);
+    GetSize(splitted);
+    if (hasError_)
     {
+        std::cout << "Error: Can't get size!" << std::endl;
+        return;
+    }
+    std::vector<std::string> strData; // vector to store data in string format
+    for (auto& str : splitted)
+    {
+        Common::tools::trim(str);
         auto splittedData = Common::tools::split(str, ' ');
         if (splittedData.size() != size_)
         {
@@ -31,21 +37,22 @@ Parser::Parser(const char* name)
             return;
         }
         for (const auto& d : splittedData)
-            data.push_back(d);
+            strData.push_back(d);
     }
-    if (data.size() != size_ * size_)
+    if (strData.size() != size_ * size_)
     {
-        std::cout << "Error: size is not correct! Expected: " << size_ * size_ << " Got: " << data.size() << std::endl;
+        std::cout << "Error: size is not correct! Expected: " << size_ * size_ << " Got: " << strData.size() << std::endl;
         hasError_ = true;
         return;
     }
 
-    if ( ValidateData(data) )
+    // If data is valid convert it to int
+    if ( ValidateData(strData) )
     {
-        data_ = new int(size_ * size_);
-        for (int i = 0; i < data.size(); i++)
-            data_[i] = std::stoi(data[i]);
-        return;
+        data_ = new int[size_ * size_];
+        for (int i = 0; i < strData.size(); i++)
+            data_[i] = std::stoi(strData[i]);
+        return ;
     }
     std::cout << "Error: Invalid character!" << std::endl;
     hasError_ = true;
@@ -70,6 +77,28 @@ int* Parser::GetData(size_t& size)
 bool Parser::HasErrors()
 {
     return (hasError_);
+}
+
+void Parser::RemoveComments(std::vector<std::string>& data)
+{
+    for (int i = 0; i < data.size(); i++)
+        data[i] = data[i].substr(0, data[i].find('#'));
+    auto new_end = std::remove(data.begin(), data.end(), "");
+    data.erase(new_end, data.end());
+}
+
+void Parser::GetSize(std::vector<std::string>& data)
+{
+    for (char c : data[0])
+    {
+        if (!isdigit(c))
+        {
+            hasError_ = true;
+            return ;
+        }  
+    }
+    size_ = std::stoi(data[0]);
+    data.erase(data.begin());
 }
 
 bool Parser::ValidateData(const std::vector<std::string>& data)

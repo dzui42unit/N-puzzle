@@ -34,6 +34,10 @@ private:
     */ 
     bool ValidateData(const std::vector<std::string>& data);
 
+
+    void RemoveComments(std::vector<std::string>& data);
+    void GetSize(std::vector<std::string>& data);
+
 private:
     bool    hasError_;
     int*    data_;
