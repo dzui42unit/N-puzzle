@@ -20,8 +20,10 @@ Node::Node( int* field, size_t size,
     else
         depth_ = 0;
     
+    /// Get Heuristic value by invoking static function for it's calculation
+    /// To determine which function to call, use heuristicType_ enum value as a switch 
     if (heuristicType_ == Common::HeuristicTypes::Manhattan)
-        heuristic_ = Common::tools::invoke(&Heuristic::Manhattan, field, size);
+        heuristic_ = Common::tools::invoke(&Heuristic::Manhattan, field, size); 
     else
         assert(0 && "Not implemented yet!");
 }
@@ -39,6 +41,25 @@ Node::Node(const Node& n)
         this->field_[i] = n.field_[i];
 }
 
+Node::Node(Node&& n)
+{
+    *this = std::move(n);
+}
+
+Node& Node::operator=( const Node& n )
+{
+    this->heuristicType_ = n.heuristicType_;
+    this->heuristic_ = n.heuristic_;
+    this->depth_ = n.depth_;
+    this->size_ = n.size_;
+    this->parent_ = n.parent_;
+
+    this->field_ = std::make_unique<int[]>(size_ * size_);
+    for (int i = 0; i < size_ * size_; i++)
+        this->field_[i] = n.field_[i];
+    return (*this);
+}
+
 Node::~Node()
 {
 
@@ -46,39 +67,37 @@ Node::~Node()
 
 void Node::CreateChildNodes()
 {
-    auto newField = std::make_unique<int[]>(size_ * size_);
+    int     newField[size_ * size_];
+    int*    pNewField = newField;
     
-    auto resetField = [&]() {
-        for (int i = 0; i < size_ * size_; i++)
-            newField[i] = field_[i];
-    };
+    for (int i = 0; i < size_ * size_; i++)
+        pNewField[i] = field_[i];
 
-    resetField();
-    if (Field::CanMoveUp(newField.get(), size_))
+    if (Field::CanMoveUp(newField, size_))
     {
-        Field::Up(newField.get(), size_);
-        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
-        resetField();
+        Field::Up(newField, size_);
+        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        Field::Down(newField, size_);
     }
     
-    if (Field::CanMoveDown(newField.get(), size_))
+    if (Field::CanMoveDown(newField, size_))
     {
-        Field::Down(newField.get(), size_);
-        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
-        resetField();
+        Field::Down(newField, size_);
+        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        Field::Up(newField, size_);
     }
 
-    if (Field::CanMoveLeft(newField.get(), size_))
+    if (Field::CanMoveLeft(newField, size_))
     {
-        Field::Left(newField.get(), size_);
-        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
-        resetField();
+        Field::Left(newField, size_);
+        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        Field::Right(newField, size_);
     }
 
-    if (Field::CanMoveUp(newField.get(), size_))
+    if (Field::CanMoveRight(newField, size_))
     {
-        Field::Right(newField.get(), size_);
-        childrens_.push_back(Node(newField.get(), size_, this, heuristicType_));
-        resetField();
+        Field::Right(newField, size_);
+        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        Field::Left(newField, size_);
     }
 }
