@@ -53,7 +53,6 @@ public:
         return tokens;
     }
 
-    // countDigit(1) -> 1; countDigit(10) -> 2; countDigit(1234) -> 4
     /*
     * @brief counts number of digits in number
     * @param n - the number to count digits
@@ -64,7 +63,6 @@ public:
         return ceil(log10(n)); 
     }
 
-    // compressChars("    ", ' ') -> " "
     /*
     * @brief replaces a specified repeated character in a string with one such character
     * @param str - ref to a string to replace characters

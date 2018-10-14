@@ -18,10 +18,10 @@ public:
                       Node* Parent = nullptr,
                       Common::HeuristicTypes hType = Common::HeuristicTypes::Manhattan );
     
-    Node(const Node& n);
-    Node(Node&& n);
-    Node() = delete;
-    Node& operator=( const Node& rhs );
+    // Node(const Node& n);
+    // Node(Node&& n);
+    // Node() = delete;
+    // Node& operator=( const Node& rhs );
 
     /*
     * @brief Creates child nodes and places them in childrens_

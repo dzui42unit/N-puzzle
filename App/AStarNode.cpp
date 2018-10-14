@@ -28,38 +28,6 @@ Node::Node( int* field, size_t size,
         assert(0 && "Not implemented yet!");
 }
 
-Node::Node(const Node& n)
-{
-    this->heuristicType_ = n.heuristicType_;
-    this->heuristic_ = n.heuristic_;
-    this->depth_ = n.depth_;
-    this->size_ = n.size_;
-    this->parent_ = n.parent_;
-
-    this->field_ = std::make_unique<int[]>(size_ * size_);
-    for (int i = 0; i < size_ * size_; i++)
-        this->field_[i] = n.field_[i];
-}
-
-Node::Node(Node&& n)
-{
-    *this = std::move(n);
-}
-
-Node& Node::operator=( const Node& n )
-{
-    this->heuristicType_ = n.heuristicType_;
-    this->heuristic_ = n.heuristic_;
-    this->depth_ = n.depth_;
-    this->size_ = n.size_;
-    this->parent_ = n.parent_;
-
-    this->field_ = std::make_unique<int[]>(size_ * size_);
-    for (int i = 0; i < size_ * size_; i++)
-        this->field_[i] = n.field_[i];
-    return (*this);
-}
-
 Node::~Node()
 {
 
