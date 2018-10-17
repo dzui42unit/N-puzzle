@@ -53,7 +53,7 @@ void Field::Print(int* field, size_t size)
     int maxWidthInDigits = 0;
 
     // Find max width in digits to align data
-    for (int i = 0; i < size * size; i++)
+    for (size_t i = 0; i < size * size; i++)
     {
         int digitNum = Common::tools::countDigit(field[i]);
         if (maxWidthInDigits < digitNum)
@@ -65,18 +65,18 @@ void Field::Print(int* field, size_t size)
     section += "-|";
     auto showSections = [&](){ // Function to draw section
         std::cout << '|';
-        for (int j = 0; j < size; j++)
+        for (size_t j = 0; j < size; j++)
         {
             std::cout << '-' << section;
         }
         std::cout << std::endl;
     };
 
-    for (int i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         showSections();
         std::cout << "| ";
-        for (int j = 0; j < size; j++)
+        for (size_t j = 0; j < size; j++)
         {
             if (field[i * size + j] == 0)
                 std::cout << std::setw(maxWidthInDigits) << ' ' << " | ";
@@ -93,7 +93,7 @@ void Field::PrintPrintf(int* field, size_t size)
     int maxWidthInDigits = 0;
 
     // Find max width in digits to align data
-    for (int i = 0; i < size * size; i++)
+    for (size_t i = 0; i < size * size; i++)
     {
         int digitNum = Common::tools::countDigit(field[i]);
         if (maxWidthInDigits < digitNum)
@@ -105,16 +105,16 @@ void Field::PrintPrintf(int* field, size_t size)
     section += "-|";
     auto showSections = [&](){ // Function to draw section
         printf("|");
-        for (int j = 0; j < size; j++)
+        for (size_t j = 0; j < size; j++)
             printf("-%s", section.c_str());
         printf("\n");
     };
 
-    for (int i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         showSections();
         printf("| ");
-        for (int j = 0; j < size; j++)
+        for (size_t j = 0; j < size; j++)
         {
             if (field[i * size + j] == 0)
                 printf("%*c | ", maxWidthInDigits, ' ');
@@ -133,7 +133,7 @@ int Field::FindZeroPos(int* field, size_t size)
     if (field[zeroPos] == 0)
         return (zeroPos);
 
-    for (int i = 0; i < size * size; i++)
+    for (size_t i = 0; i < size * size; i++)
     {
         if (field[i] == 0)
         {

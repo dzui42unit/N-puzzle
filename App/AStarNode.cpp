@@ -3,16 +3,15 @@
 
 #include <cassert>
 
-
 Node::Node( int* field, size_t size,
             Node* Parent,
             Common::HeuristicTypes hType)
-    : parent_(Parent)
-    , field_(new int[size * size]())
+    : field_(new int[size * size]())
+    , parent_(Parent)
     , size_(size)
     , heuristicType_(hType)
 {
-    for (int i = 0; i < size_ * size_; i++)
+    for (size_t i = 0; i < size_ * size_; i++)
         field_[i] = field[i];
 
     if (parent_ != nullptr)

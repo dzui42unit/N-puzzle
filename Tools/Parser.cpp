@@ -54,7 +54,7 @@ Parser::Parser(const char* name)
     if ( ValidateData(strData) )
     {
         data_ = new int[size_ * size_];
-        for (int i = 0; i < strData.size(); i++)
+        for (size_t i = 0; i < strData.size(); i++)
             data_[i] = std::stoi(strData[i]);
         return ;
     }
@@ -86,7 +86,7 @@ bool Parser::HasErrors()
 void Parser::RemoveComments(std::vector<std::string>& data)
 {
     // traverse vector and delete all char parts starting from # 
-    for (int i = 0; i < data.size(); i++)
+    for (size_t i = 0; i < data.size(); i++)
         data[i] = data[i].substr(0, data[i].find('#'));
     // remove empty strings from vector
     auto new_end = std::remove(data.begin(), data.end(), "");
