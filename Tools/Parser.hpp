@@ -27,6 +27,12 @@ public:
     */ 
     bool HasErrors();
 
+    /*
+    * @brief Called to see if the pazzle on N size is solvable
+    * @return true if puzzle is solvable, false otherwise 
+    */
+    bool IsSolvable();
+
 private:
     /*
     * @brief Ensures that the given values can be converted to int and is positive
@@ -34,12 +40,30 @@ private:
     */ 
     bool ValidateData(const std::vector<std::string>& data);
 
+    /*
+    * @brief Checks if the puzzle can be solved
+    * @return true if the puzzle has solution, false otherwise
+    */
+    bool ValidateSolution(void);
+
+    /*
+    * @brief returns the row number of the blank element on the board counting from the bottom
+    * @return integer number of the row
+    */
+    size_t  GetBlankRowPosition(void);
+
+    /*
+    *  @brief return the number of inversions
+    *  inversion is a pair of tiles (a, b) where a > b and a appears before b
+    */
+    size_t  CountInversions(void);
 
     void RemoveComments(std::vector<std::string>& data);
     void GetSize(std::vector<std::string>& data);
 
 private:
     bool    hasError_;
+    bool    isSolvable_;
     int*    data_;
     size_t  size_;
 

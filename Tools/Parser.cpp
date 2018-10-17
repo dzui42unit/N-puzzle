@@ -6,6 +6,7 @@
 
 Parser::Parser(const char* name)
     : hasError_(false)
+    , isSolvable_(true)
     , data_(nullptr)
 {
     // Load file content
@@ -56,10 +57,19 @@ Parser::Parser(const char* name)
         data_ = new int[size_ * size_];
         for (size_t i = 0; i < strData.size(); i++)
             data_[i] = std::stoi(strData[i]);
+    }
+    else
+    {
+        std::cout << "Error: Invalid character!" << std::endl;
+        hasError_ = true;
         return ;
     }
-    std::cout << "Error: Invalid character!" << std::endl;
-    hasError_ = true;
+
+    if (!ValidateSolution())
+    {
+        isSolvable_ = false;
+        return ;
+    }
 }
 
 Parser::~Parser()
@@ -124,4 +134,81 @@ bool Parser::ValidateData(const std::vector<std::string>& data)
         }
     }
     return (true);
+}
+
+bool    Parser::ValidateSolution(void)
+{
+    size_t blank_space_row_pos = GetBlankRowPosition();
+    size_t inversions = CountInversions();
+
+    std::cout << "Blank space row: " << blank_space_row_pos << std::endl;
+    std::cout << "Number of inversions: " << inversions << std::endl;
+    if (size_ % 2 == 0) 
+    {
+        std::cout << "The size of puzzle is " << size_ << " and it is even" << std::endl;
+        if (blank_space_row_pos % 2 == 0 && inversions % 2 != 0)
+        {
+            std::cout << "First condition is satisfied" << std::endl;
+            std::cout << "Blank is on even and inversions odd" << std::endl;
+            return (true);
+        }
+        if (blank_space_row_pos % 2 != 0 && inversions % 2 == 0)
+        {
+            std::cout << "Second condition is satisfied" << std::endl;
+            std::cout << "Blank is on odd and inversions even" << std::endl;
+            return (true);
+        }
+    }
+    else
+    {
+        std::cout << "The size of puzzle is " << size_ << " and it is odd" << std::endl;
+       if (inversions % 2 == 0)
+       {
+            std::cout << "First condition is satisfied" << std::endl;
+            return (true);
+       }
+    }
+    return (false);
+}
+
+size_t  Parser::GetBlankRowPosition(void)
+{
+    size_t blank_space_row;
+
+    blank_space_row = 0;
+    for ( ; blank_space_row < size_ * size_; blank_space_row++)
+    {
+        if (data_[blank_space_row] == 0)
+        {
+            blank_space_row = size_ - (blank_space_row / size_);
+            break ;
+        }
+    }
+    return (blank_space_row);
+}
+
+size_t  Parser::CountInversions(void)
+{
+    size_t inversions;
+
+    inversions = 0;
+    for (size_t a_pos = 0; a_pos < size_ * size_; a_pos++)
+    {
+        for (size_t b_pos = a_pos + 1; b_pos < size_ * size_; b_pos++)
+        {
+            if ((data_[a_pos] != 0 && data_[b_pos] != 0))
+            {
+                if (data_[a_pos] > data_[b_pos] && a_pos < b_pos)
+                {
+                    inversions++;
+                }
+            }
+        }
+    }
+    return (inversions);
+}
+
+bool    Parser::IsSolvable(void)
+{
+    return (isSolvable_);
 }

@@ -22,17 +22,23 @@ int main(int ac, char** av)
         std::cout << "Error while parsing specified file! Aborting!" << std::endl;
         ShowHelp(av);
     }
+    if (!parser.IsSolvable())
+    {
+        std::cout << "Error: puzzle has no possible solutions" << std::endl;
+        exit (0);
+    }
 
     // Get field data
     size_t  size;
     int*    data = parser.GetData(size);
     Field::Print(data, size);
 
+    /*
     // Create first node and traverse it a few times for test
     Node n(data, size);
     Node* nodePtr = &n;
     int heuristics = 1;
-    while (heuristics)
+    while (heuristics > 0)
     {
 
         nodePtr->CreateChildNodes();
@@ -53,7 +59,7 @@ int main(int ac, char** av)
 
     nodePtr = &n;
     heuristics = 1;
-    while (heuristics)
+    while (heuristics > 0)
     {
         Node* newNodePtr = nullptr;
         for (auto& newNode : nodePtr->childrens_)
@@ -72,5 +78,6 @@ int main(int ac, char** av)
         std::cout << std::endl;
         heuristics = nodePtr->GetHeuristicValue();
     }
+    */
     return (0);
 }
