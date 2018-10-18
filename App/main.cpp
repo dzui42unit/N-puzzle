@@ -33,7 +33,6 @@ int main(int ac, char** av)
     int*    data = parser.GetData(size);
     Field::Print(data, size);
 
-    /*
     // Create first node and traverse it a few times for test
     Node n(data, size);
     Node* nodePtr = &n;
@@ -78,6 +77,5 @@ int main(int ac, char** av)
         std::cout << std::endl;
         heuristics = nodePtr->GetHeuristicValue();
     }
-    */
     return (0);
 }

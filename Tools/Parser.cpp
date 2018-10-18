@@ -192,17 +192,12 @@ size_t  Parser::CountInversions(void)
     size_t inversions;
 
     inversions = 0;
-    for (size_t a_pos = 0; a_pos < size_ * size_; a_pos++)
+    for (size_t a_pos = 0; a_pos < (size_ * size_) - 1; a_pos++)
     {
         for (size_t b_pos = a_pos + 1; b_pos < size_ * size_; b_pos++)
         {
-            if ((data_[a_pos] != 0 && data_[b_pos] != 0))
-            {
-                if (data_[a_pos] > data_[b_pos] && a_pos < b_pos)
-                {
-                    inversions++;
-                }
-            }
+            if (data_[a_pos] && data_[b_pos] && data_[a_pos] > data_[b_pos])
+                inversions++;
         }
     }
     return (inversions);

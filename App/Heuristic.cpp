@@ -3,15 +3,25 @@
 #include <random>
 #include <cassert>
 
-/// Dummy implementation
-int Heuristic::Manhattan(...)
+int Heuristic::Manhattan(int *field, size_t size)
 {
-    static int times_to_test = 100;
-    // std::mt19937 rng;
-    // rng.seed(std::random_device()());
-    // std::uniform_int_distribution<std::mt19937::result_type> distribution(0, 10000); // distribution in range [0, 10000]
+	size_t heuristic;
 
-    // return (distribution(rng));
-    times_to_test--;
-    return (times_to_test);
+	heuristic = 0;
+
+	std::cout << "Hello from Heuristic function Manhattan" << std::endl;
+	// Field::Print(field, size);
+
+	for (size_t i = 0; i < size * size; i++)
+	{
+		// std::cout << "i = " << i / size << " | j = " << i % size << std::endl;
+		if (static_cast<int>(i) != (field[i] - 1) && field[i] != 0) {
+			heuristic += std::abs(static_cast<int>(i / size) - static_cast<int>((field[i] - 1) / size));
+			heuristic += std::abs(static_cast<int>(i % size) - static_cast<int>((field[i] - 1) % size));
+		}
+	}
+	std::cout << std::endl;
+	std:: cout << heuristic << std::endl;
+	// exit(0);
+    return (heuristic);
 }
