@@ -57,7 +57,6 @@ void TraverseNodes(int* field, size_t size)
         }
         if (nodePtr->GetHeuristicValue() == 0)
         {
-            nodePtr->HighlitePath();
             PrintPath(nodePtr);
             return;
         }

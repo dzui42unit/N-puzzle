@@ -14,7 +14,6 @@ Node::Node( int* field, size_t size,
     , openedNodes_(openedNodes)
     , parent_(Parent)
     , heuristicType_(hType)
-    , isHighlighted_(false)
 {
     for (size_t i = 0; i < size_ * size_; i++)
         field_[i] = field[i];
@@ -105,16 +104,4 @@ bool Node::IsFieldUnique(int* field, size_t size)
             return (false);
     }
     return (true);
-}
-
-bool Node::isHighlighted()
-{
-    return (isHighlighted_);
-}
-
-void Node::HighlitePath()
-{
-    isHighlighted_ = true;
-    if (parent_ != nullptr)
-        const_cast<Node*>(parent_)->HighlitePath();
 }

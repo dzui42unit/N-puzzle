@@ -31,8 +31,6 @@ public:
     int         GetDepth() const { return (depth_); }
     const Node* GetParent() const { return (parent_); }
     int*        GetField() const { return (field_.get()); }
-    void        HighlitePath();
-    bool        isHighlighted();
     ~Node();
 
 public:
@@ -50,7 +48,6 @@ private:
     int                                 heuristic_;
     int                                 depth_;
     Common::HeuristicTypes              heuristicType_;
-    bool                                isHighlighted_;
     int                                 depthCoef_ = 0;
     int                                 heuristicCoef_ = 1;
 };
