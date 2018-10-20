@@ -28,6 +28,12 @@ public:
     bool HasErrors();
 
     /*
+    *   @brief returns the size of grid
+    *   @return the size size of grid as integer
+    */
+    size_t  GetGridSize(void) { return size_; }
+
+    /*
     * @brief Called to see if the pazzle on N size is solvable
     * @return true if puzzle is solvable, false otherwise 
     */

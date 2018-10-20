@@ -65,11 +65,11 @@ Parser::Parser(const char* name)
         return ;
     }
 
-    if (!ValidateSolution())
-    {
-        isSolvable_ = false;
-        return ;
-    }
+    // if (!ValidateSolution())
+    // {
+    //     isSolvable_ = false;
+    //     return ;
+    // }
 }
 
 Parser::~Parser()
@@ -138,36 +138,46 @@ bool Parser::ValidateData(const std::vector<std::string>& data)
 
 bool    Parser::ValidateSolution(void)
 {
-    size_t blank_space_row_pos = GetBlankRowPosition();
-    size_t inversions = CountInversions();
+    // size_t blank_space_row_pos = GetBlankRowPosition();
+    // size_t inversions = CountInversions();
 
-    std::cout << "Blank space row: " << blank_space_row_pos << std::endl;
-    std::cout << "Number of inversions: " << inversions << std::endl;
-    if (size_ % 2 == 0) 
-    {
-        std::cout << "The size of puzzle is " << size_ << " and it is even" << std::endl;
-        if (blank_space_row_pos % 2 == 0 && inversions % 2 != 0)
-        {
-            std::cout << "First condition is satisfied" << std::endl;
-            std::cout << "Blank is on even and inversions odd" << std::endl;
-            return (true);
-        }
-        if (blank_space_row_pos % 2 != 0 && inversions % 2 == 0)
-        {
-            std::cout << "Second condition is satisfied" << std::endl;
-            std::cout << "Blank is on odd and inversions even" << std::endl;
-            return (true);
-        }
-    }
-    else
-    {
-        std::cout << "The size of puzzle is " << size_ << " and it is odd" << std::endl;
-       if (inversions % 2 == 0)
-       {
-            std::cout << "First condition is satisfied" << std::endl;
-            return (true);
-       }
-    }
+    // std::cout << "Blank space row: " << blank_space_row_pos << std::endl;
+    // std::cout << "Number of inversions: " << inversions << std::endl;
+
+    // int parity = 0;
+    // int gridWidth = (int) Math.sqrt(puzzle.length);
+    // int row = 0; // the current row we are on
+    // int blankRow = 0; // the row with the blank tile
+
+    // for (int i = 0; i < puzzle.length; i++)
+    // {
+    //     if (i % gridWidth == 0) { // advance to next row
+    //         row++;
+    //     }
+    //     if (puzzle[i] == 0) { // the blank tile
+    //         blankRow = row; // save the row on which encountered
+    //         continue;
+    //     }
+    //     for (int j = i + 1; j < puzzle.length; j++)
+    //     {
+    //         if (puzzle[i] > puzzle[j] && puzzle[j] != 0)
+    //         {
+    //             parity++;
+    //         }
+    //     }
+    // }
+
+    // if (gridWidth % 2 == 0) { // even grid
+    //     if (blankRow % 2 == 0) { // blank on odd row; counting from bottom
+    //         return parity % 2 == 0;
+    //     } else { // blank on even row; counting from bottom
+    //         return parity % 2 != 0;
+    //     }
+    // } else { // odd grid
+    //     return parity % 2 == 0;
+    // }
+
+
     return (false);
 }
 
@@ -192,13 +202,18 @@ size_t  Parser::CountInversions(void)
     size_t inversions;
 
     inversions = 0;
-    for (size_t a_pos = 0; a_pos < (size_ * size_) - 1; a_pos++)
+    for (size_t i = 0; i < (size_ * size_); i++)
     {
-        for (size_t b_pos = a_pos + 1; b_pos < size_ * size_; b_pos++)
+        int cur_invers = 0;
+        for (size_t j = i + 1; j < size_ * size_; j++)
         {
-            if (data_[a_pos] && data_[b_pos] && data_[a_pos] > data_[b_pos])
+            if (data_[j] && data_[i] > data_[j])
+            {
+                cur_invers++;
                 inversions++;
+            }
         }
+        std::cout << data_[i] << " gives: " << cur_invers << std::endl;
     }
     return (inversions);
 }

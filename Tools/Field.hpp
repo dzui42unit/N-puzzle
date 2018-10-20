@@ -59,4 +59,11 @@ public:
     * @return empty cell position in array, if it can't be found - '-1'
     */ 
     static int      FindZeroPos(int* field, size_t size);
+
+    /*
+    * @brief creates a field with 'snail solution'
+    * @param size - size of the field
+    * @return pointer to the new generated 'snail field' 
+    */
+    static int      *CreateSnailGrid(size_t size);
 };
