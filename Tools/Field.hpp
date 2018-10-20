@@ -65,5 +65,5 @@ public:
     * @param size - size of the field
     * @return pointer to the new generated 'snail field' 
     */
-    static int      *CreateSnailGrid(size_t size);
+    static int      *CreateSnailGrid(int *field = nullptr, size_t size = 0);
 };

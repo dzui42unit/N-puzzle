@@ -145,7 +145,7 @@ int Field::FindZeroPos(int* field, size_t size)
     return (-1);
 }
 
-int    *Field::CreateSnailGrid(size_t size)
+int    *Field::CreateSnailGrid(int *src, size_t size)
 {
     int *snail_grid;
     int iterator;
@@ -163,55 +163,63 @@ int    *Field::CreateSnailGrid(size_t size)
     end_col = size;
     snail_grid = nullptr;
     snail_grid = new int[size * size];
-    std::cout << size << std::endl;
+
     while (start_row < end_row && start_col < end_col) 
     { 
         // generate the first row from the remaining rows
         for (iterator = start_col; iterator < end_col; ++iterator) 
         {
-            if (static_cast<size_t>(number + 1) == size * size)
+            if (static_cast<size_t>(number + 1) == size * size && !src)
                 number = -1;
-            snail_grid[size * start_row + iterator] = number + 1;
+            if (!src)
+                snail_grid[size * start_row + iterator] = number + 1;
+            else
+                snail_grid[number] = src[size * start_row + iterator];
             number++;
         }
         start_row++; 
-
         // generate the last column from the remaining columns
         for (iterator = start_row; iterator < end_row; ++iterator) 
         {
-            if (static_cast<size_t>(number + 1) == size * size)
+            if (static_cast<size_t>(number + 1) == size * size && !src)
                 number = -1;
-            snail_grid[size * iterator + (end_col-1)] = number + 1;
+            if (!src)
+                snail_grid[size * iterator + (end_col-1)] = number + 1;
+            else
+                snail_grid[number] = src[size * iterator + (end_col-1)];
             number++; 
         }
         end_col--;
-
         // generate the last row from the remaining rows
         if ( start_row < end_row) 
         { 
             for (iterator = end_col-1; iterator >= start_col; --iterator) 
             {
-                if (static_cast<size_t>(number + 1) == size * size)
+                if (static_cast<size_t>(number + 1) == size * size && !src)
                     number = -1;
-                snail_grid[size * (end_row-1) + iterator] = number + 1;
+                if (!src)
+                    snail_grid[size * (end_row-1) + iterator] = number + 1;
+                else
+                    snail_grid[number] = src[size * (end_row-1) + iterator];
                 number++;
             } 
             end_row--; 
         } 
-
         // generate the first column from the remaining columns
         if (start_col < end_col) 
         { 
             for (iterator = end_row-1; iterator >= start_row; --iterator) 
             { 
-                if (static_cast<size_t>(number + 1) == size * size)
+                if (static_cast<size_t>(number + 1) == size * size && !src)
                     number = -1;
-                snail_grid[size * iterator + start_col] = number + 1;
+                if (!src)
+                    snail_grid[size * iterator + start_col] = number + 1;
+                else
+                    snail_grid[number] = src[size * iterator + start_col];
                 number++;
             } 
             start_col++;     
         }
     }
-
     return (snail_grid); 
 }

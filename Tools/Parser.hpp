@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common.hpp"
+#include "Field.hpp"
 
 class Parser
 {
@@ -64,6 +65,13 @@ private:
     */
     size_t  CountInversions(void);
 
+    /*
+    *   @brief returns the index of element in the 'snail field'
+    *   @param number - represent the value whose index needs to be found
+    *   @return integer value that represents index of the given element
+    */
+    int     GetSnailFieldIndex(int * grid, int number_to_find);
+
     void RemoveComments(std::vector<std::string>& data);
     void GetSize(std::vector<std::string>& data);
 
@@ -72,5 +80,6 @@ private:
     bool    isSolvable_;
     int*    data_;
     size_t  size_;
+    int*    snail_grid_;
 
 };

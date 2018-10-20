@@ -11,6 +11,9 @@ int Heuristic::Manhattan(int *field, size_t size)
 
 	// std::cout << "Hello from Heuristic function Manhattan" << std::endl;
 
+	// int *snail_grid;
+
+	// snail_grid = Field::CreateSnailGrid(field, )
 	for (size_t i = 0; i < size * size; i++)
 	{
 		// std::cout << "i = " << i / size << " | j = " << i % size << std::endl;

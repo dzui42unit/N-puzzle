@@ -83,11 +83,16 @@ int main(int ac, char** av)
         std::cout << "Error while parsing specified file! Aborting!" << std::endl;
         ShowHelp(av);
     }
-    if (!parser.IsSolvable())
-    {
-        std::cout << "Error: puzzle has no possible solutions" << std::endl;
-        exit (0);
-    }
+
+    // if (!parser.IsSolvable())
+    // {
+    //     std::cout << "Error: puzzle has no possible solutions" << std::endl;
+    //     exit (0);
+    // }
+    // else
+    // {
+    //     std::cout << "SUCCESS, IT IS SOLVABLE\n\n";
+    // }
 
     // Get field data
     size_t  size;
