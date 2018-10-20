@@ -38,25 +38,53 @@ void Node::CreateChildNodes()
 
     if (Field::Up(pNewField, size_))
     {
-        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        if (IsFieldUnique(pNewField, size_))
+            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
         Field::Down(pNewField, size_);
     }
     
     if (Field::Down(pNewField, size_))
     {
-        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        if (IsFieldUnique(pNewField, size_))
+            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
         Field::Up(pNewField, size_);
     }
 
     if (Field::Left(pNewField, size_))
     {
-        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        if (IsFieldUnique(pNewField, size_))
+            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
         Field::Right(pNewField, size_);
     }
 
     if (Field::Right(pNewField, size_))
     {
-        childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+        if (IsFieldUnique(pNewField, size_))
+            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
         Field::Left(pNewField, size_);
     }
+}
+
+bool Node::IsFieldUnique(int* field, size_t size)
+{
+    
+    const Node* parent = this->parent_;
+    
+    while (parent)
+    {
+        bool equalityFlag = true;
+        int* pField = parent->GetField();
+        for (int i = 0; i < size * size; i++)
+        {
+            if (pField[i] != field[i])
+            {
+                equalityFlag = false;
+                break;
+            }
+        }
+        if (equalityFlag)
+            return (false);
+        parent = parent->parent_;
+    }
+    return (true);
 }
