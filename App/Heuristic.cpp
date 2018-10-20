@@ -9,8 +9,7 @@ int Heuristic::Manhattan(int *field, size_t size)
 
 	heuristic = 0;
 
-	std::cout << "Hello from Heuristic function Manhattan" << std::endl;
-	// Field::Print(field, size);
+	// std::cout << "Hello from Heuristic function Manhattan" << std::endl;
 
 	for (size_t i = 0; i < size * size; i++)
 	{
@@ -20,7 +19,7 @@ int Heuristic::Manhattan(int *field, size_t size)
 			heuristic += std::abs(static_cast<int>(i % size) - static_cast<int>((field[i] - 1) % size));
 		}
 	}
-	std::cout << std::endl;
+	// std::cout << std::endl;
 	std:: cout << heuristic << std::endl;
 	// exit(0);
     return (heuristic);

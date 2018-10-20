@@ -40,7 +40,7 @@ void TraverseNodes(int* field, size_t size)
 {
     std::list<Node*> openedNodes;
     std::list<Node*> closedNodes;
-    Node startingNode(field, size, &closedNodes);
+    Node startingNode(field, size, &closedNodes, &openedNodes);
 
     openedNodes.push_back(&startingNode);
     while (openedNodes.size() > 0)
@@ -50,7 +50,9 @@ void TraverseNodes(int* field, size_t size)
         {
             if (nodePtr == nullptr)
                 nodePtr = node;
-            else if (nodePtr->GetHeuristicValue() > node->GetHeuristicValue())
+            else if (node->GetHeuristicValue() == 0)
+                nodePtr = node;
+            else if (nodePtr->GetValue() > node->GetValue())
                 nodePtr = node;
         }
         if (nodePtr->GetHeuristicValue() == 0)

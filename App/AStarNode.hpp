@@ -16,6 +16,7 @@ public:
     */ 
     explicit    Node( int*  field, size_t size,
                       std::list<Node*>* closedNodes,
+                      std::list<Node*>* openedNodes,
                       Node* Parent = nullptr,
                       Common::HeuristicTypes hType = Common::HeuristicTypes::Manhattan );
     
@@ -24,6 +25,7 @@ public:
     */ 
     void        CreateChildNodes();
 
+    int         GetValue() const { return ( depthCoef_ * depth_ + heuristicCoef_ * heuristic_ ); } 
     size_t      GetSize() const { return (size_); }
     int         GetHeuristicValue() const { return (heuristic_); }
     int         GetDepth() const { return (depth_); }
@@ -43,9 +45,12 @@ private:
     std::unique_ptr<int[]>              field_;
     size_t                              size_;
     std::list<Node*>*                   closedNodes_;
+    std::list<Node*>*                   openedNodes_;
     const Node*                         parent_;
     int                                 heuristic_;
     int                                 depth_;
     Common::HeuristicTypes              heuristicType_;
     bool                                isHighlighted_;
+    int                                 depthCoef_ = 0;
+    int                                 heuristicCoef_ = 1;
 };
