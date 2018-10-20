@@ -74,7 +74,7 @@ bool Node::IsFieldUnique(int* field, size_t size)
     {
         bool equalityFlag = true;
         int* pField = parent->GetField();
-        for (int i = 0; i < size * size; i++)
+        for (size_t i = 0; i < size * size; i++)
         {
             if (pField[i] != field[i])
             {
