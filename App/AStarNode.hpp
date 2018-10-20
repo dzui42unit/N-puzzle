@@ -15,6 +15,7 @@ public:
     * @brief Construct the node and set all it's values except childrens_
     */ 
     explicit    Node( int*  field, size_t size,
+                      std::list<Node*>* closedNodes,
                       Node* Parent = nullptr,
                       Common::HeuristicTypes hType = Common::HeuristicTypes::Manhattan );
     
@@ -28,6 +29,8 @@ public:
     int         GetDepth() const { return (depth_); }
     const Node* GetParent() const { return (parent_); }
     int*        GetField() const { return (field_.get()); }
+    void        HighlitePath();
+    bool        isHighlighted();
     ~Node();
 
 public:
@@ -38,9 +41,11 @@ private:
 
 private:
     std::unique_ptr<int[]>              field_;
+    size_t                              size_;
+    std::list<Node*>*                   closedNodes_;
     const Node*                         parent_;
     int                                 heuristic_;
     int                                 depth_;
-    size_t                              size_;
     Common::HeuristicTypes              heuristicType_;
+    bool                                isHighlighted_;
 };

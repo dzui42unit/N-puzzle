@@ -10,6 +10,66 @@ void ShowHelp(char** av)
     exit(0);
 }
 
+void PrintPath(Node* NodePtr)
+{
+    if (NodePtr == nullptr)
+        return ;
+
+    std::list<Node*> path;
+
+    path.push_front(NodePtr);
+
+    Node* parent = const_cast<Node*>(NodePtr->GetParent());
+    while (parent)
+    {
+        path.push_front(parent);
+        parent = const_cast<Node*>(parent->GetParent());
+    }
+
+    for (const auto& node : path)
+    {
+        int* field = node->GetField();
+        size_t size = node->GetSize();
+        std::cout << "Depth: " << node->GetDepth() << " Heuristics: " << node->GetHeuristicValue() << " Field:" << std::endl;
+        Field::PrintPrintf(field, size);
+        std::cout << std::endl;
+    }
+}
+
+void TraverseNodes(int* field, size_t size)
+{
+    std::list<Node*> openedNodes;
+    std::list<Node*> closedNodes;
+    Node startingNode(field, size, &closedNodes);
+
+    openedNodes.push_back(&startingNode);
+    while (openedNodes.size() > 0)
+    {
+        Node* nodePtr = nullptr;
+        for (auto node : openedNodes)
+        {
+            if (nodePtr == nullptr)
+                nodePtr = node;
+            else if (nodePtr->GetHeuristicValue() > node->GetHeuristicValue())
+                nodePtr = node;
+        }
+        if (nodePtr->GetHeuristicValue() == 0)
+        {
+            nodePtr->HighlitePath();
+            PrintPath(nodePtr);
+            return;
+        }
+
+        nodePtr->CreateChildNodes();
+        for (auto& newNode : nodePtr->childrens_)
+            openedNodes.push_back(&newNode);
+        auto nodeToClose = std::find(openedNodes.begin(), openedNodes.end(), nodePtr);
+        closedNodes.push_back(*nodeToClose);
+        openedNodes.erase(nodeToClose);
+    }
+
+}
+
 int main(int ac, char** av)
 {
     if (ac < 2)
@@ -31,33 +91,7 @@ int main(int ac, char** av)
     // Get field data
     size_t  size;
     int*    data = parser.GetData(size);
-    Field::Print(data, size);
-
-    // Create first node and traverse it a few times for test
-    Node n(data, size);
-    Node* nodePtr = &n;
-    int heuristics = 1;
-    while (heuristics > 0)
-    {
-
-        nodePtr->CreateChildNodes();
-        Node* newNodePtr = nullptr;
-        for (auto& newNode : nodePtr->childrens_)
-        {
-            if (newNodePtr != nullptr)
-            {
-                if (newNodePtr->GetHeuristicValue() > newNode.GetHeuristicValue())
-                    newNodePtr = &newNode;
-            }
-            else
-                newNodePtr = &newNode;
-        }
-        nodePtr = newNodePtr;
-        std::cout << "Depth: " << nodePtr->GetDepth() << " Heuristics: " << nodePtr->GetHeuristicValue() << " Field:" << std::endl;
-        Field::PrintPrintf(nodePtr->GetField(), nodePtr->GetSize());
-        std::cout << std::endl;
-        heuristics = nodePtr->GetHeuristicValue();
-    }
+    TraverseNodes(data, size);
 
     return (0);
 }

@@ -4,12 +4,15 @@
 #include <cassert>
 
 Node::Node( int* field, size_t size,
+            std::list<Node*>* closedNodes,
             Node* Parent,
             Common::HeuristicTypes hType)
     : field_(new int[size * size]())
-    , parent_(Parent)
     , size_(size)
+    , closedNodes_(closedNodes)
+    , parent_(Parent)
     , heuristicType_(hType)
+    , isHighlighted_(false)
 {
     for (size_t i = 0; i < size_ * size_; i++)
         field_[i] = field[i];
@@ -39,41 +42,41 @@ void Node::CreateChildNodes()
     if (Field::Up(pNewField, size_))
     {
         if (IsFieldUnique(pNewField, size_))
-            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+            childrens_.emplace_back(pNewField, size_, closedNodes_, this, heuristicType_);
         Field::Down(pNewField, size_);
     }
     
     if (Field::Down(pNewField, size_))
     {
         if (IsFieldUnique(pNewField, size_))
-            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+            childrens_.emplace_back(pNewField, size_, closedNodes_, this, heuristicType_);
         Field::Up(pNewField, size_);
     }
 
     if (Field::Left(pNewField, size_))
     {
         if (IsFieldUnique(pNewField, size_))
-            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+            childrens_.emplace_back(pNewField, size_, closedNodes_, this, heuristicType_);
         Field::Right(pNewField, size_);
     }
 
     if (Field::Right(pNewField, size_))
     {
         if (IsFieldUnique(pNewField, size_))
-            childrens_.emplace_back(pNewField, size_, this, heuristicType_);
+            childrens_.emplace_back(pNewField, size_, closedNodes_, this, heuristicType_);
         Field::Left(pNewField, size_);
     }
 }
 
 bool Node::IsFieldUnique(int* field, size_t size)
 {
-    
-    const Node* parent = this->parent_;
-    
-    while (parent)
+    if (closedNodes_ == nullptr)
+        return (false);
+    for (const auto& closedNode : *closedNodes_)
     {
+        int* pField = closedNode->GetField();
         bool equalityFlag = true;
-        int* pField = parent->GetField();
+
         for (size_t i = 0; i < size * size; i++)
         {
             if (pField[i] != field[i])
@@ -84,7 +87,37 @@ bool Node::IsFieldUnique(int* field, size_t size)
         }
         if (equalityFlag)
             return (false);
-        parent = parent->parent_;
     }
+
+    // const Node* parent = this->parent_;
+    //
+    // while (parent)
+    // {
+    //     bool equalityFlag = true;
+    //     int* pField = parent->GetField();
+    //     for (size_t i = 0; i < size * size; i++)
+    //     {
+    //         if (pField[i] != field[i])
+    //         {
+    //             equalityFlag = false;
+    //             break;
+    //         }
+    //     }
+    //     if (equalityFlag)
+    //         return (false);
+    //     parent = parent->parent_;
+    // }
     return (true);
+}
+
+bool Node::isHighlighted()
+{
+    return (isHighlighted_);
+}
+
+void Node::HighlitePath()
+{
+    isHighlighted_ = true;
+    if (parent_ != nullptr)
+        const_cast<Node*>(parent_)->HighlitePath();
 }
