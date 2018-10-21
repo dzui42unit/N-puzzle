@@ -35,9 +35,9 @@ public:
 
 public:
     std::list<Node>  childrens_;
-
 private:
     bool IsFieldUnique(int* field, size_t size);
+
 
 private:
     std::unique_ptr<int[]>              field_;

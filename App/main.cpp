@@ -84,19 +84,10 @@ int main(int ac, char** av)
         ShowHelp(av);
     }
 
-    // if (!parser.IsSolvable())
-    // {
-    //     std::cout << "Error: puzzle has no possible solutions" << std::endl;
-    //     exit (0);
-    // }
-    // else
-    // {
-    //     std::cout << "SUCCESS, IT IS SOLVABLE\n\n";
-    // }
-
     // Get field data
     size_t  size;
     int*    data = parser.GetData(size);
+
     TraverseNodes(data, size);
 
     return (0);

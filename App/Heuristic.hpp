@@ -8,10 +8,10 @@
 #include "../Tools/Field.hpp"
 
 class Heuristic
-{
+{	
 public:
     Heuristic() = delete;
     ~Heuristic() = delete;
     static int  Manhattan(int *field, size_t size);
-    // not implemented yet
+    static int  GetSnailFieldIndex(int *grid, int number_to_find, size_t size);
 };

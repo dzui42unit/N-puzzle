@@ -66,13 +66,13 @@ Parser::Parser(const char* name)
     }
 
     // create snail grid for 
-    snail_grid_ = Field::CreateSnailGrid(data_, size_);
+    // snail_grid_ = Field::CreateSnailGrid(data_, size_);
 
-    if (!ValidateSolution())
-    {
-        isSolvable_ = false;
-        return ;
-    }
+    // if (!ValidateSolution())
+    // {
+    //     isSolvable_ = false;
+    //     return ;
+    // }
 }
 
 Parser::~Parser()
@@ -148,42 +148,7 @@ bool    Parser::ValidateSolution(void)
     std::cout << "Blank space row: " << blank_space_row_pos << std::endl;
     std::cout << "Number of inversions: " << inversions << std::endl;
 
-   // if (size_ & 1) 
-   //      return !(inversions & 1); 
-  
-   //  else     // grid is even 
-   //  { 
-   //      if (blank_space_row_pos & 1) 
-   //          return !(convert & 1); 
-   //      else
-   //          return invCount & 1; 
-   //  } 
-
     return ((size_ % 2 != 0) && (inversions % 2 == 0) ) || ((size_ % 2 == 0) && ((blank_space_row_pos % 2 != 0) == (inversions % 2 == 0)));
-
-
-    // if ((size_ % 2 != 0) && (inversions % 2 == 0))
-    // {
-    //     std::cout << "Size is odd and inversion is even\n";
-    //     return (true);
-    // }
-    // else 
-    // {
-    //     if (blank_space_row_pos % 2 == 0)
-    //         return (inversions % 2 != 0);
-    //     else
-    //         return (inversions % 2 == 0);
-    //     // std::cout << "Size is even and row is even and inversions odd\n";
-    //     // return (true);
-    // }
-    // else if ((size_ % 2 == 0) && (blank_space_row_pos % 2 != 0) && (inversions % 2 == 0))
-    // {
-    //     if ()
-    //     std::cout << "Size is even and row is odd and inversions even\n";
-    //     return (true);
-    // }
-
-    return (false);
 }
 
 size_t  Parser::GetBlankRowPosition(void)
@@ -214,11 +179,8 @@ int     Parser::GetSnailFieldIndex(int *grid, int number_to_find)
 size_t  Parser::CountInversions(void)
 {
     size_t  inversions;
-    // int     *snail_grid_default;
 
     inversions = 0;
-    // snail_grid_default = Field::CreateSnailGrid(nullptr, size_);
-
     size_t i = 0;
     while (i != size_ * size_)
     {
@@ -228,14 +190,11 @@ size_t  Parser::CountInversions(void)
         {
             if (snail_grid_[j] && snail_grid_[i] > snail_grid_[j] && (GetSnailFieldIndex(snail_grid_, snail_grid_[i]) < GetSnailFieldIndex(snail_grid_, snail_grid_[j])))
             {
-                std::cout << "number " << snail_grid_[i] << " inverts with " << snail_grid_[j] << std::endl;
                 cur_invers++;
                 inversions++;
             }
             j++;
         }
-        std::cout << snail_grid_[i] << " gives: " << cur_invers << std::endl;
-        // std::cout << GetSnailFieldIndex(snail_grid_, snail_grid_[i]) << " ";
         i++;
     }
     std::cout << std::endl;
