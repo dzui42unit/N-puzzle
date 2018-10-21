@@ -14,8 +14,9 @@ namespace Common
 enum class HeuristicTypes
 {
     Manhattan,
-    Foo,
-    Bar
+    LinearConflictManhattan,
+    Bar,
+    HeruisticError,
 };
 
 class tools

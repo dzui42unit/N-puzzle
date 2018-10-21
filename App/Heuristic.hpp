@@ -13,5 +13,6 @@ public:
     Heuristic() = delete;
     ~Heuristic() = delete;
     static int  Manhattan(int *field, size_t size);
+    static int 	LinearConflictManhattanDistance(int *field, size_t size);
     static int  GetSnailFieldIndex(int *grid, int number_to_find, size_t size);
 };

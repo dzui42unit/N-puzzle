@@ -2,11 +2,14 @@
 #include "../Tools/Field.hpp"
 #include "AStarNode.hpp"
 #include "Heuristic.hpp"
+#include <exception>
 
 
 void ShowHelp(char** av)
 {
-    std::cout << "Usage: " << av[0] << " {filename}" << std::endl;
+    std::cout << "Usage: " << av[0] << " {filename} {n - number of heuristic function}" << std::endl;
+    std::cout << "\t [1] - Manhattan Distance heuristic function" << std::endl;
+    std::cout << "\t [2] - Linear Conflict + Manhattan Distance heuristic function" << std::endl;
     exit(0);
 }
 
@@ -36,11 +39,38 @@ void PrintPath(Node* NodePtr)
     }
 }
 
-void TraverseNodes(int* field, size_t size)
+Common::HeuristicTypes ChooseHeruistic(char **av)
+{
+    int heuristic_nb;
+
+    try {
+        heuristic_nb = std::stoi(av[2]);
+    }
+    catch(std::exception &e)
+    {
+        std::cout << "Error: use integers for the numbers for heuristic function" << std::endl;
+    }
+
+    switch (heuristic_nb)
+    {
+    case 1:
+        return (Common::HeuristicTypes::Manhattan);
+    case 2:
+        return (Common::HeuristicTypes::LinearConflictManhattan);
+        break ;
+    default:
+        std::cout << "Error: icorrect number for heuristic function." << std::endl;
+        ShowHelp(av);
+    }
+    return (Common::HeuristicTypes::HeruisticError);
+}
+
+void TraverseNodes(int* field, size_t size, Common::HeuristicTypes hType)
 {
     std::list<Node*> openedNodes;
     std::list<Node*> closedNodes;
-    Node startingNode(field, size, &closedNodes, &openedNodes);
+
+    Node startingNode(field, size, &closedNodes, &openedNodes, nullptr, hType);
 
     openedNodes.push_back(&startingNode);
     while (openedNodes.size() > 0)
@@ -73,7 +103,7 @@ void TraverseNodes(int* field, size_t size)
 
 int main(int ac, char** av)
 {
-    if (ac < 2)
+    if (ac !=  3)
         ShowHelp(av);
     
     // Load file
@@ -87,8 +117,9 @@ int main(int ac, char** av)
     // Get field data
     size_t  size;
     int*    data = parser.GetData(size);
+    Common::HeuristicTypes hType = ChooseHeruistic(av);
 
-    TraverseNodes(data, size);
+    TraverseNodes(data, size, hType);
 
     return (0);
 }

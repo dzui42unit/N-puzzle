@@ -26,7 +26,9 @@ Node::Node( int* field, size_t size,
     /// Get Heuristic value by invoking static function for it's calculation
     /// To determine which function to call, use heuristicType_ enum value as a switch 
     if (heuristicType_ == Common::HeuristicTypes::Manhattan)
-        heuristic_ = Heuristic::Manhattan(field, size); //Common::tools::invoke(&Heuristic::Manhattan, field, size); 
+        heuristic_ = Heuristic::Manhattan(field, size);
+    else if (heuristicType_ == Common::HeuristicTypes::LinearConflictManhattan)
+        heuristic_ = Heuristic::LinearConflictManhattanDistance(field, size);
     else
         assert(0 && "Not implemented yet!");
 }
