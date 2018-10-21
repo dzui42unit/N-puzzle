@@ -74,34 +74,31 @@ bool Node::IsFieldUnique(int* field, size_t size)
     if (closedNodes_ == nullptr || openedNodes_ == nullptr)
         return (false);
 
-    for (const auto& closedNode : *closedNodes_)
+    auto isNotUnique = [&](std::list<Node*>* nodes)
     {
-        int* pField = closedNode->GetField();
-        bool equalityFlag = true;
-
-        for (size_t i = 0; i < size * size; i++)
+        for (const auto& node : *nodes)
         {
-            if (pField[i] != field[i])
-                equalityFlag = false;
-        }
-        if (equalityFlag)
-            return (false);
-    }
+            if (node == this)
+                continue;
+            int* pField = node->GetField();
+            bool equalityFlag = true;
 
-    for (const auto& openedNode : *openedNodes_)
-    {
-        if (openedNode == this)
-            continue;
-        int* pField = openedNode->GetField();
-        bool equalityFlag = true;
-
-        for (size_t i = 0; i < size * size; i++)
-        {
-            if (pField[i] != field[i])
-                equalityFlag = false;
+            for (size_t i = 0; i < size * size; i++)
+            {
+                if (pField[i] != field[i])
+                {
+                    equalityFlag = false;
+                    break;
+                }
+            }
+            if (equalityFlag)
+                return (true);
         }
-        if (equalityFlag)
-            return (false);
-    }
+        return (false);
+    };
+
+    if ( isNotUnique(closedNodes_) || isNotUnique(openedNodes_) )
+        return (false);
+    
     return (true);
 }
