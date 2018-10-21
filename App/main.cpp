@@ -3,7 +3,7 @@
 #include "AStarNode.hpp"
 #include "Heuristic.hpp"
 #include <exception>
-
+#include <random>
 
 void ShowHelp(char** av)
 {
@@ -11,6 +11,41 @@ void ShowHelp(char** av)
     std::cout << "\t [1] - Manhattan Distance heuristic function" << std::endl;
     std::cout << "\t [2] - Linear Conflict + Manhattan Distance heuristic function" << std::endl;
     exit(0);
+}
+
+int     *GeneratePuzzle(size_t size)
+{
+    std::mt19937_64 rng(std::time(NULL));
+    std::uniform_int_distribution<int> next_move(1, 4);
+    std::uniform_int_distribution<int> iterations(100, 1000000);
+
+    int nb;
+    int iter;
+    int *puzzle;
+
+    puzzle = nullptr;
+    iter = iterations(rng);
+    puzzle = Field::CreateSnailGrid(nullptr, size);
+    for (int i = 0; i < iter; i++)
+    {
+        nb = next_move(rng);
+        switch (nb)
+        {
+        case 1:
+            Field::Up(puzzle, size);
+            break;
+        case 2:
+            Field::Down(puzzle, size);
+            break;
+        case 3:
+            Field::Left(puzzle, size);
+            break;
+        case 4:
+            Field::Right(puzzle, size);
+            break;
+        }
+    }
+    return (puzzle);
 }
 
 void PrintPath(Node* NodePtr)
@@ -103,23 +138,34 @@ void TraverseNodes(int* field, size_t size, Common::HeuristicTypes hType)
 
 int main(int ac, char** av)
 {
-    if (ac !=  3)
+    size_t                  size;
+    int*                    data;
+    Common::HeuristicTypes  hType;
+
+    data = nullptr;
+    if (ac < 3)
         ShowHelp(av);
-    
-    // Load file
-    Parser parser(av[1]);
-    if (parser.HasErrors())
+    else
     {
-        std::cout << "Error while parsing specified file! Aborting!" << std::endl;
-        ShowHelp(av);
+        // Load file
+        Parser parser(av[1]);
+        if (parser.HasErrors())
+        {
+            std::cout << "Error while parsing specified file! Aborting!" << std::endl;
+            ShowHelp(av);
+        }
+    
+        /*
+        // this a puzzle generator
+        size = 3;
+        data = GeneratePuzzle(size);
+        */
+
+        //Get field data
+        data = parser.GetData(size);
+        hType = ChooseHeruistic(av);
+        // start node traversal
+        TraverseNodes(data, size, hType);
     }
-
-    // Get field data
-    size_t  size;
-    int*    data = parser.GetData(size);
-    Common::HeuristicTypes hType = ChooseHeruistic(av);
-
-    TraverseNodes(data, size, hType);
-
     return (0);
 }
