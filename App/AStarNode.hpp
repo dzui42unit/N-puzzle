@@ -25,7 +25,6 @@ public:
     */ 
     void        CreateChildNodes();
 
-    int         GetValue() const { return ( depthCoef_ * depth_ + heuristicCoef_ * heuristic_ ); } 
     size_t      GetSize() const { return (size_); }
     int         GetHeuristicValue() const { return (heuristic_); }
     int         GetDepth() const { return (depth_); }
@@ -48,6 +47,4 @@ private:
     int                                 heuristic_;
     int                                 depth_;
     Common::HeuristicTypes              heuristicType_;
-    int                                 depthCoef_ = 0;
-    int                                 heuristicCoef_ = 1;
 };

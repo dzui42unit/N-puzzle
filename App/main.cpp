@@ -82,7 +82,7 @@ void TraverseNodes(int* field, size_t size, Common::HeuristicTypes hType)
                 nodePtr = node;
             else if (node->GetHeuristicValue() == 0)
                 nodePtr = node;
-            else if (nodePtr->GetValue() > node->GetValue())
+            else if (nodePtr->GetHeuristicValue() > node->GetHeuristicValue())
                 nodePtr = node;
         }
         if (nodePtr->GetHeuristicValue() == 0)

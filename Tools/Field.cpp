@@ -128,16 +128,10 @@ void Field::PrintPrintf(int* field, size_t size)
 
 int Field::FindZeroPos(int* field, size_t size)
 {
-    static int zeroPos = 0;
-
-    if (field[zeroPos] == 0)
-        return (zeroPos);
-
     for (size_t i = 0; i < size * size; i++)
     {
         if (field[i] == 0)
         {
-            zeroPos = i;
             return (i);
         }
     }

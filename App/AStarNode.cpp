@@ -3,6 +3,7 @@
 
 #include <cassert>
 
+
 Node::Node( int* field, size_t size,
             std::list<Node*>* closedNodes,
             std::list<Node*>* openedNodes,
@@ -15,8 +16,7 @@ Node::Node( int* field, size_t size,
     , parent_(Parent)
     , heuristicType_(hType)
 {
-    for (size_t i = 0; i < size_ * size_; i++)
-        field_[i] = field[i];
+    std::copy(field, field + size * size, field_.get());
 
     if (parent_ != nullptr)
         depth_ = parent_->depth_ + 1;
