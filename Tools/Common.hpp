@@ -11,10 +11,10 @@
 namespace Common
 {
 
-enum class HeuristicTypes
+enum HeuristicTypes
 {
-    Manhattan,
-    LinearConflictManhattan,
+    Manhattan = 0,
+    LinearConflictManhattan = 1,
     Bar,
     HeruisticError,
 };

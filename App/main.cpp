@@ -1,5 +1,7 @@
 #include "../Tools/Parser.hpp"
 #include "../Tools/Field.hpp"
+#include "../Tools/argh.h"
+#include "../Tools/Common.hpp"
 #include "AStarNode.hpp"
 #include "Heuristic.hpp"
 #include <exception>
@@ -138,34 +140,57 @@ void TraverseNodes(int* field, size_t size, Common::HeuristicTypes hType)
 
 int main(int ac, char** av)
 {
-    size_t                  size;
+    size_t                  size = 3;
     int*                    data;
-    Common::HeuristicTypes  hType;
+    Common::HeuristicTypes  hType = Common::Manhattan;
 
     data = nullptr;
-    if (ac < 3)
-        ShowHelp(av);
-    else
+    std::string filename = "";
+
+    argh::parser cmdl;
+    std::initializer_list<const char* const> flags = {"file", "f", "h", "heuristic", "s", "size" };
+    cmdl.add_params(flags);
+    cmdl.parse(ac, av);
+
+    for (auto& param : cmdl.params())
     {
-        // Load file
-        Parser parser(av[1]);
+        if (param.first == "f" || param.first == "file")
+            filename = param.second;
+        else if (param.first == "h" || param.first == "heuristic")
+        {
+            if (param.second == "1" || param.second == "Manhattan" || param.second == "manhattan")
+                hType = Common::Manhattan;
+            else if (param.second == "2" || param.second == "LinearConflict" || param.second == "linearconflict")
+                hType = Common::LinearConflictManhattan;
+        }
+        else if (param.first == "s" || param.first == "size")
+        {
+            size = std::stoi(param.second);
+        }
+        else
+        {
+            ShowHelp(av);
+        }
+    }
+
+    // Try to Load file
+    std::cout << filename.c_str() << std::endl;
+    if (filename != "")
+    {
+        Parser parser(filename.c_str());
         if (parser.HasErrors())
         {
             std::cout << "Error while parsing specified file! Aborting!" << std::endl;
             ShowHelp(av);
         }
-    
-        /*
-        // this a puzzle generator
-        size = 3;
-        data = GeneratePuzzle(size);
-        */
-
-        //Get field data
         data = parser.GetData(size);
-        hType = ChooseHeruistic(av);
-        // start node traversal
         TraverseNodes(data, size, hType);
     }
+    else
+    {
+        data = GeneratePuzzle(size);
+        TraverseNodes(data, size, hType);
+    }
+    
     return (0);
 }
