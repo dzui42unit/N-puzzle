@@ -65,14 +65,15 @@ Parser::Parser(const char* name)
         return ;
     }
 
-    // create snail grid for 
-    // snail_grid_ = Field::CreateSnailGrid(data_, size_);
-
-    // if (!ValidateSolution())
-    // {
-    //     isSolvable_ = false;
-    //     return ;
-    // }
+    for (size_t i = 0; i < size_ * size_; i++)
+    {
+        if (!IsUnique(data_[i]))
+        {
+            std::cout << "Error: all element in the puzzle should be unique" << std::endl;
+            hasError_ = true;
+            return;
+        }
+    }
 }
 
 Parser::~Parser()
@@ -175,6 +176,19 @@ int     Parser::GetSnailFieldIndex(int *grid, int number_to_find)
     return (-1);
 }
 
+
+bool    Parser::IsUnique(int elem)
+{
+    int counter;
+
+    counter = 0;
+    for (size_t i = 0; i < size_ * size_; i++)
+    {
+        if (data_[i] == elem)
+            counter++;
+    }
+    return (counter == 1);
+}
 
 size_t  Parser::CountInversions(void)
 {

@@ -75,6 +75,8 @@ private:
     void RemoveComments(std::vector<std::string>& data);
     void GetSize(std::vector<std::string>& data);
 
+    bool    IsUnique(int elem);
+
 private:
     bool    hasError_;
     bool    isSolvable_;
