@@ -74,6 +74,17 @@ Parser::Parser(const char* name)
             return;
         }
     }
+
+    for (size_t i = 0; i < size_ * size_; i++)
+    {
+        if (data_[i] >= static_cast<int>(size_ * size_))
+        {
+            std::cout << data_[i] << std::endl;
+            std::cout << "Error: puzzle element should be in range from " << 1 << " till " << size_ * size_ - 1 << std::endl;
+            hasError_ = true;
+            return;
+        }
+    }
 }
 
 Parser::~Parser()
