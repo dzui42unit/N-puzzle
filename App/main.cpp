@@ -12,6 +12,7 @@ void ShowHelp(char** av)
     std::cout << "Usage: " << av[0] << " {filename} {n - number of heuristic function}" << std::endl;
     std::cout << "\t [1] - Manhattan Distance heuristic function" << std::endl;
     std::cout << "\t [2] - Linear Conflict + Manhattan Distance heuristic function" << std::endl;
+    std::cout << "\t [3] - Lenear Conflict + Misplaced Tiles heuristic function" << std::endl;
     exit(0);
 }
 
@@ -95,6 +96,9 @@ Common::HeuristicTypes ChooseHeruistic(char **av)
     case 2:
         return (Common::HeuristicTypes::LinearConflictManhattan);
         break ;
+    case 3:
+        return (Common::HeuristicTypes::EuclidianDistance);
+        break;
     default:
         std::cout << "Error: icorrect number for heuristic function." << std::endl;
         ShowHelp(av);
@@ -162,6 +166,8 @@ int main(int ac, char** av)
                 hType = Common::Manhattan;
             else if (param.second == "2" || param.second == "LinearConflict" || param.second == "linearconflict")
                 hType = Common::LinearConflictManhattan;
+            else if (param.second == "3")
+                hType = Common::EuclidianDistance;
         }
         else if (param.first == "s" || param.first == "size")
         {
@@ -174,7 +180,7 @@ int main(int ac, char** av)
     }
 
     // Try to Load file
-    std::cout << filename.c_str() << std::endl;
+    // std::cout << filename.c_str() << std::endl;
     if (filename != "")
     {
         Parser parser(filename.c_str());

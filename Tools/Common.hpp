@@ -15,8 +15,8 @@ enum HeuristicTypes
 {
     Manhattan = 0,
     LinearConflictManhattan = 1,
-    Bar,
-    HeruisticError,
+    EuclidianDistance = 2,
+    HeruisticError = 10
 };
 
 class tools

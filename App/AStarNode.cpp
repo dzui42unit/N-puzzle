@@ -29,6 +29,8 @@ Node::Node( int* field, size_t size,
         heuristic_ = Heuristic::Manhattan(field, size);
     else if (heuristicType_ == Common::HeuristicTypes::LinearConflictManhattan)
         heuristic_ = Heuristic::LinearConflictManhattanDistance(field, size);
+    else if (heuristicType_ == Common::HeuristicTypes::EuclidianDistance)
+        heuristic_ = Heuristic::EuclideanDistance(field, size);
     else
         assert(0 && "Not implemented yet!");
 }
