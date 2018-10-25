@@ -1,6 +1,6 @@
 CXX = g++
-CXXFLAGS = -std=c++14 -Wall -Wextra -Werror  -Ofast
-CXXXFLAGS = -std=c++14 -Wall -Wextra -Werror -Ofast
+CXXFLAGS = -std=c++1z -Wall -Wextra -Werror  -Ofast
+CXXXFLAGS = -std=c++1z -Wall -Wextra -Werror -Ofast
 NAME = N-Puzzle
 
 SRC = 	App/main.cpp \
