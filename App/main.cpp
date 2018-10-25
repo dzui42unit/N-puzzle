@@ -6,13 +6,19 @@
 #include "Heuristic.hpp"
 #include <exception>
 #include <random>
+#include <ctime>
 
 void ShowHelp(char** av)
 {
-    std::cout << "Usage: " << av[0] << " {filename} {n - number of heuristic function}" << std::endl;
-    std::cout << "\t [1] - Manhattan Distance heuristic function" << std::endl;
-    std::cout << "\t [2] - Linear Conflict + Manhattan Distance heuristic function" << std::endl;
-    std::cout << "\t [3] - Lenear Conflict + Misplaced Tiles heuristic function" << std::endl;
+    std::cout << "Usage: " << av[0] << " [-fsh][--help]" << std::endl;
+    std::cout << std::endl << "OPTIONS:" << std::endl;
+    std::cout << "\t-f --file\t\tUse file as input" << std::endl;
+    std::cout << "\t-s --size\t\tSize of generated map 3 by default, must be greater than 2. If -f is specified will be ignored" << std::endl;
+    std::cout << "\t-h --heuristic\t\tWhich heuristic to use" << std::endl;
+    std::cout << "\t\t\t\t[1 | Manhattan | manhattan] - Manhattan Distance heuristic function" << std::endl;
+    std::cout << "\t\t\t\t[2 | LinearConflict | linearconflict] - Linear Conflict + Manhattan Distance heuristic function" << std::endl;
+    std::cout << "\t\t\t\t[3 | EuclidianDistance | euclidiandistance] - Lenear Conflict + Misplaced Tiles heuristic function" << std::endl;
+    std::cout << "\t--help\t\t\tShow this help" << std::endl;
     exit(0);
 }
 
@@ -77,40 +83,10 @@ void PrintPath(Node* NodePtr)
     }
 }
 
-Common::HeuristicTypes ChooseHeruistic(char **av)
-{
-    int heuristic_nb;
-
-    try {
-        heuristic_nb = std::stoi(av[2]);
-    }
-    catch(std::exception &e)
-    {
-        std::cout << "Error: use integers for the numbers for heuristic function" << std::endl;
-    }
-
-    switch (heuristic_nb)
-    {
-    case 1:
-        return (Common::HeuristicTypes::Manhattan);
-    case 2:
-        return (Common::HeuristicTypes::LinearConflictManhattan);
-        break ;
-    case 3:
-        return (Common::HeuristicTypes::EuclidianDistance);
-        break;
-    default:
-        std::cout << "Error: icorrect number for heuristic function." << std::endl;
-        ShowHelp(av);
-    }
-    return (Common::HeuristicTypes::HeruisticError);
-}
-
 void TraverseNodes(int* field, size_t size, Common::HeuristicTypes hType)
 {
     std::list<Node*> openedNodes;
     std::list<Node*> closedNodes;
-
     Node startingNode(field, size, &closedNodes, &openedNodes, nullptr, hType);
 
     openedNodes.push_back(&startingNode);
@@ -139,7 +115,6 @@ void TraverseNodes(int* field, size_t size, Common::HeuristicTypes hType)
         closedNodes.push_back(*nodeToClose);
         openedNodes.erase(nodeToClose);
     }
-
 }
 
 int main(int ac, char** av)
@@ -152,11 +127,11 @@ int main(int ac, char** av)
     std::string filename = "";
 
     argh::parser cmdl;
-    std::initializer_list<const char* const> flags = {"file", "f", "h", "heuristic", "s", "size" };
+    std::initializer_list<const char* const> flags = {"file", "f", "h", "heuristic", "s", "size"};
     cmdl.add_params(flags);
     cmdl.parse(ac, av);
 
-    for (auto& param : cmdl.params())
+    for (const auto& param : cmdl.params())
     {
         if (param.first == "f" || param.first == "file")
             filename = param.second;
@@ -166,8 +141,10 @@ int main(int ac, char** av)
                 hType = Common::Manhattan;
             else if (param.second == "2" || param.second == "LinearConflict" || param.second == "linearconflict")
                 hType = Common::LinearConflictManhattan;
-            else if (param.second == "3")
+            else if (param.second == "3" || param.second == "EuclidianDistance" || param.second == "euclidiandistance")
                 hType = Common::EuclidianDistance;
+            else
+                ShowHelp(av);
         }
         else if (param.first == "s" || param.first == "size")
         {
@@ -179,8 +156,18 @@ int main(int ac, char** av)
         }
     }
 
+    for (const auto& flag : cmdl.flags())
+    {
+        if (flag == "help")
+            ShowHelp(av);
+        for (const std::string str : flags )
+        {
+            if (flag == str)
+                ShowHelp(av);
+        }
+    }
+
     // Try to Load file
-    // std::cout << filename.c_str() << std::endl;
     if (filename != "")
     {
         Parser parser(filename.c_str());
@@ -194,6 +181,8 @@ int main(int ac, char** av)
     }
     else
     {
+        if (size < 3)
+            ShowHelp(av);
         data = GeneratePuzzle(size);
         TraverseNodes(data, size, hType);
     }

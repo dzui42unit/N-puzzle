@@ -77,10 +77,9 @@ Parser::Parser(const char* name)
 
     for (size_t i = 0; i < size_ * size_; i++)
     {
-        if (data_[i] >= static_cast<int>(size_ * size_))
+        if (data_[i] >= int(size_ * size_))
         {
-            std::cout << data_[i] << std::endl;
-            std::cout << "Error: puzzle element should be in range from " << 1 << " till " << size_ * size_ - 1 << std::endl;
+            std::cout << "Error: puzzle element should be in range from " << 0 << " till " << size_ * size_ - 1 << " in your map: " << data_[i] <<  std::endl;
             hasError_ = true;
             return;
         }
@@ -122,6 +121,7 @@ void Parser::RemoveComments(std::vector<std::string>& data)
 void Parser::GetSize(std::vector<std::string>& data)
 {
     // check that 'size field' exists and is valid
+    Common::tools::trim(data[0]);
     for (char c : data[0])
     {
         if (!isdigit(c))
@@ -132,6 +132,8 @@ void Parser::GetSize(std::vector<std::string>& data)
     }
     // get size in int format
     size_ = std::stoi(data[0]);
+    if (size_ < 3)
+        hasError_ = true;
     // delete now useless size field from vector
     data.erase(data.begin());
 }
